@@ -9,373 +9,305 @@ void main() {
     test('ScatterChartData equality test', () {
       expect(scatterChartData1 == scatterChartData1Clone, true);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(showingTooltipIndicators: []),
-        false,
-      );
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(showingTooltipIndicators: []),
+          false);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              borderData: FlBorderData(
-                show: true,
-                border: Border.all(color: Colors.green),
-              ),
-            ),
-        false,
-      );
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  borderData: FlBorderData(
+                      show: true, border: Border.all(color: Colors.green))),
+          false);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              borderData: FlBorderData(
-                show: true,
-                border: Border.all(color: Colors.white),
-              ),
-            ),
-        true,
-      );
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  borderData: FlBorderData(
+                      show: true, border: Border.all(color: Colors.white))),
+          true);
+      expect(scatterChartData1 == scatterChartData1Clone.copyWith(maxX: 444),
+          false);
       expect(
-        scatterChartData1 == scatterChartData1Clone.copyWith(maxX: 444),
-        false,
-      );
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(scatterSpots: [
+                ScatterSpot(0, 0,
+                    show: false, radius: 33, color: Colors.yellow),
+                ScatterSpot(2, 2,
+                    show: false, radius: 11, color: Colors.purple),
+                ScatterSpot(1, 2, show: false, radius: 11, color: Colors.white),
+              ]),
+          true);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              scatterSpots: [
-                ScatterSpot(
-                  0,
-                  0,
-                  show: false,
-                  dotPainter: FlDotCirclePainter(
-                    radius: 33,
-                    color: Colors.yellow,
-                  ),
-                ),
-                ScatterSpot(
-                  2,
-                  2,
-                  show: false,
-                  dotPainter: FlDotCirclePainter(
-                    radius: 11,
-                    color: Colors.purple,
-                  ),
-                ),
-                ScatterSpot(
-                  1,
-                  2,
-                  show: false,
-                  dotPainter: FlDotCirclePainter(
-                    radius: 11,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-        true,
-      );
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(scatterSpots: [
+                ScatterSpot(2, 2,
+                    show: false, radius: 11, color: Colors.purple),
+                ScatterSpot(0, 0,
+                    show: false, radius: 33, color: Colors.yellow),
+                ScatterSpot(1, 2, show: false, radius: 11, color: Colors.white),
+              ]),
+          false);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              scatterSpots: [
-                ScatterSpot(
-                  2,
-                  2,
-                  show: false,
-                  dotPainter: FlDotCirclePainter(
-                    radius: 11,
-                    color: Colors.purple,
-                  ),
-                ),
-                ScatterSpot(
-                  0,
-                  0,
-                  show: false,
-                  dotPainter: FlDotCirclePainter(
-                    radius: 33,
-                    color: Colors.yellow,
-                  ),
-                ),
-                ScatterSpot(
-                  1,
-                  2,
-                  show: false,
-                  dotPainter: FlDotCirclePainter(
-                    radius: 11,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-        false,
-      );
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(clipData: FlClipData.all()),
+          false);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(clipData: const FlClipData.all()),
-        false,
-      );
-      expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              gridData: const FlGridData(
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  gridData: FlGridData(
                 show: false,
                 getDrawingHorizontalLine: gridGetDrawingLine,
                 getDrawingVerticalLine: gridGetDrawingLine,
                 checkToShowHorizontalLine: gridCheckToShowLine,
                 checkToShowVerticalLine: gridCheckToShowLine,
+                drawHorizontalLine: true,
                 drawVerticalLine: false,
                 horizontalInterval: 33,
                 verticalInterval: 1,
-              ),
-            ),
-        true,
-      );
+              )),
+          true);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              gridData: const FlGridData(
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  gridData: FlGridData(
+                show: true,
                 getDrawingHorizontalLine: gridGetDrawingLine,
                 getDrawingVerticalLine: gridGetDrawingLine,
                 checkToShowHorizontalLine: gridCheckToShowLine,
                 checkToShowVerticalLine: gridCheckToShowLine,
+                drawHorizontalLine: true,
                 drawVerticalLine: false,
                 horizontalInterval: 33,
                 verticalInterval: 1,
-              ),
-            ),
-        false,
-      );
+              )),
+          false);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              gridData: FlGridData(
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  gridData: FlGridData(
                 show: false,
-                getDrawingHorizontalLine: (value) => const FlLine(
-                  color: Colors.green,
-                  strokeWidth: 12,
-                  dashArray: [1, 2],
-                ),
-                getDrawingVerticalLine: (value) => const FlLine(
-                  color: Colors.yellow,
-                  strokeWidth: 33,
-                  dashArray: [0, 1],
-                ),
+                getDrawingHorizontalLine: (value) => FlLine(
+                    color: Colors.green, strokeWidth: 12, dashArray: [1, 2]),
+                getDrawingVerticalLine: (value) => FlLine(
+                    color: Colors.yellow, strokeWidth: 33, dashArray: [0, 1]),
                 checkToShowHorizontalLine: (value) => false,
                 checkToShowVerticalLine: (value) => true,
+                drawHorizontalLine: true,
                 drawVerticalLine: false,
                 horizontalInterval: 32,
                 verticalInterval: 1,
-              ),
-            ),
-        false,
-      );
+              )),
+          false);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              titlesData: const FlTitlesData(
-                leftTitles: AxisTitles(
-                  axisNameSize: 33,
-                  axisNameWidget: MockData.widget1,
-                ),
-                rightTitles: AxisTitles(
-                  axisNameSize: 1326,
-                  axisNameWidget: MockData.widget3,
-                  sideTitles: SideTitles(reservedSize: 500, showTitles: true),
-                ),
-                topTitles: AxisTitles(
-                  axisNameSize: 34,
-                  axisNameWidget: MockData.widget4,
-                ),
-                bottomTitles: AxisTitles(
-                  axisNameSize: 22,
-                  axisNameWidget: MockData.widget2,
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                titlesData: FlTitlesData(
+                  show: true,
+                  leftTitles: AxisTitles(
+                    axisNameSize: 33,
+                    axisNameWidget: MockData.widget1,
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: AxisTitles(
+                    axisNameSize: 1326,
+                    axisNameWidget: MockData.widget3,
+                    sideTitles: SideTitles(reservedSize: 500, showTitles: true),
+                  ),
+                  topTitles: AxisTitles(
+                    axisNameSize: 34,
+                    axisNameWidget: MockData.widget4,
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    axisNameSize: 22,
+                    axisNameWidget: MockData.widget2,
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
               ),
-            ),
-        true,
-      );
+          true);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              titlesData: const FlTitlesData(
-                leftTitles: AxisTitles(
-                  axisNameSize: 332,
-                  axisNameWidget: Text('title 1'),
-                ),
-                rightTitles: AxisTitles(
-                  axisNameSize: 1326,
-                  axisNameWidget: Text('title 3'),
-                  sideTitles: SideTitles(reservedSize: 500, showTitles: true),
-                ),
-                topTitles: AxisTitles(
-                  axisNameSize: 34,
-                  axisNameWidget: Text('title 4'),
-                ),
-                bottomTitles: AxisTitles(
-                  axisNameSize: 22,
-                  axisNameWidget: Text('title 2'),
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                titlesData: FlTitlesData(
+                  show: true,
+                  leftTitles: AxisTitles(
+                    axisNameSize: 332,
+                    axisNameWidget: const Text('title 1'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: AxisTitles(
+                    axisNameSize: 1326,
+                    axisNameWidget: const Text('title 3'),
+                    sideTitles: SideTitles(reservedSize: 500, showTitles: true),
+                  ),
+                  topTitles: AxisTitles(
+                    axisNameSize: 34,
+                    axisNameWidget: const Text('title 4'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    axisNameSize: 22,
+                    axisNameWidget: const Text('title 2'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
               ),
-            ),
-        false,
-      );
+          false);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              titlesData: const FlTitlesData(
-                leftTitles: AxisTitles(
-                  axisNameSize: 33,
-                  axisNameWidget: Text('title 1'),
-                ),
-                rightTitles: AxisTitles(
-                  axisNameSize: 1326,
-                  axisNameWidget: Text('title 3'),
-                  sideTitles: SideTitles(reservedSize: 500, showTitles: true),
-                ),
-                topTitles: AxisTitles(
-                  axisNameSize: 34,
-                  axisNameWidget: Text('title 4'),
-                ),
-                bottomTitles: AxisTitles(
-                  axisNameSize: 22,
-                  axisNameWidget: Text('title 2'),
-                  sideTitles: SideTitles(showTitles: true),
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                titlesData: FlTitlesData(
+                  show: true,
+                  leftTitles: AxisTitles(
+                    axisNameSize: 33,
+                    axisNameWidget: const Text('title 1'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: AxisTitles(
+                    axisNameSize: 1326,
+                    axisNameWidget: const Text('title 3'),
+                    sideTitles: SideTitles(reservedSize: 500, showTitles: true),
+                  ),
+                  topTitles: AxisTitles(
+                    axisNameSize: 34,
+                    axisNameWidget: const Text('title 4'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    axisNameSize: 22,
+                    axisNameWidget: const Text('title 2'),
+                    sideTitles: SideTitles(showTitles: true),
+                  ),
                 ),
               ),
-            ),
-        false,
-      );
+          false);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              titlesData: const FlTitlesData(
-                leftTitles: AxisTitles(
-                  axisNameSize: 33,
-                  axisNameWidget: Text('title 1'),
-                ),
-                rightTitles: AxisTitles(
-                  axisNameSize: 1326,
-                  axisNameWidget: Text('title 1'),
-                  sideTitles: SideTitles(reservedSize: 500, showTitles: true),
-                ),
-                topTitles: AxisTitles(
-                  axisNameSize: 34,
-                  axisNameWidget: Text('title 4'),
-                ),
-                bottomTitles: AxisTitles(
-                  axisNameSize: 22,
-                  axisNameWidget: Text('title 2'),
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                titlesData: FlTitlesData(
+                  show: true,
+                  leftTitles: AxisTitles(
+                    axisNameSize: 33,
+                    axisNameWidget: const Text('title 1'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: AxisTitles(
+                    axisNameSize: 1326,
+                    axisNameWidget: const Text('title 1'),
+                    sideTitles: SideTitles(reservedSize: 500, showTitles: true),
+                  ),
+                  topTitles: AxisTitles(
+                    axisNameSize: 34,
+                    axisNameWidget: const Text('title 4'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    axisNameSize: 22,
+                    axisNameWidget: const Text('title 2'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
               ),
-            ),
-        false,
-      );
+          false);
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              titlesData: const FlTitlesData(
-                leftTitles: AxisTitles(
-                  axisNameSize: 33,
-                  axisNameWidget: Text('title 1'),
-                ),
-                rightTitles: AxisTitles(
-                  axisNameSize: 13262,
-                  axisNameWidget: Text('title 3'),
-                  sideTitles: SideTitles(reservedSize: 500, showTitles: true),
-                ),
-                topTitles: AxisTitles(
-                  axisNameSize: 34,
-                  axisNameWidget: Text('title 4'),
-                ),
-                bottomTitles: AxisTitles(
-                  axisNameSize: 22,
-                  axisNameWidget: Text('title 2'),
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                titlesData: FlTitlesData(
+                  show: true,
+                  leftTitles: AxisTitles(
+                    axisNameSize: 33,
+                    axisNameWidget: const Text('title 1'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: AxisTitles(
+                    axisNameSize: 13262,
+                    axisNameWidget: const Text('title 3'),
+                    sideTitles: SideTitles(reservedSize: 500, showTitles: true),
+                  ),
+                  topTitles: AxisTitles(
+                    axisNameSize: 34,
+                    axisNameWidget: const Text('title 4'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  bottomTitles: AxisTitles(
+                    axisNameSize: 22,
+                    axisNameWidget: const Text('title 2'),
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
               ),
-            ),
-        false,
-      );
+          false);
 
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(showingTooltipIndicators: []),
-        false,
-      );
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(showingTooltipIndicators: []),
+          false);
 
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone
-                .copyWith(showingTooltipIndicators: [2, 1, 0]),
-        false,
-      );
+          scatterChartData1 ==
+              scatterChartData1Clone
+                  .copyWith(showingTooltipIndicators: [2, 1, 0]),
+          false);
 
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              scatterLabelSettings: ScatterLabelSettings(
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  scatterLabelSettings: ScatterLabelSettings(
                 showLabel: true,
                 getLabelTextStyleFunction: (int index, ScatterSpot spot) =>
                     const TextStyle(color: Colors.green),
-              ),
-            ),
-        false,
-      );
+              )),
+          false);
 
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              scatterLabelSettings: ScatterLabelSettings(
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  scatterLabelSettings: ScatterLabelSettings(
                 showLabel: false,
                 getLabelTextStyleFunction: (int index, ScatterSpot spot) =>
                     const TextStyle(color: Colors.red),
                 getLabelFunction: (int index, ScatterSpot spot) =>
                     'Label - $index',
-              ),
-            ),
-        false,
-      );
+              )),
+          false);
 
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              scatterLabelSettings: ScatterLabelSettings(
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  scatterLabelSettings: ScatterLabelSettings(
                 showLabel: true,
                 getLabelTextStyleFunction: (int index, ScatterSpot spot) =>
                     const TextStyle(color: Colors.red),
                 getLabelFunction: (int index, ScatterSpot spot) =>
                     'Different Label - $index',
-              ),
-            ),
-        false,
-      );
+              )),
+          false);
 
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              scatterLabelSettings: ScatterLabelSettings(
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  scatterLabelSettings: ScatterLabelSettings(
                 showLabel: true,
                 getLabelFunction: getLabel,
                 getLabelTextStyleFunction: getLabelTextStyle,
-              ),
-            ),
-        true,
-      );
+              )),
+          true);
 
       expect(
-        scatterChartData1 ==
-            scatterChartData1Clone.copyWith(
-              scatterLabelSettings: ScatterLabelSettings(
+          scatterChartData1 ==
+              scatterChartData1Clone.copyWith(
+                  scatterLabelSettings: ScatterLabelSettings(
                 showLabel: true,
                 getLabelFunction: getLabel,
                 getLabelTextStyleFunction: getLabelTextStyle,
                 textDirection: TextDirection.rtl,
-              ),
-            ),
-        false,
-      );
+              )),
+          false);
     });
 
     test('ScatterSpot equality test', () {
-      final scatterSpot = ScatterSpot(0, 1);
-      final scatterSpotClone = ScatterSpot(0, 1);
+      final ScatterSpot scatterSpot = ScatterSpot(0, 1);
+      final ScatterSpot scatterSpotClone = ScatterSpot(0, 1);
 
       expect(scatterSpot == scatterSpotClone.copyWith(), true);
       expect(scatterSpot == scatterSpotClone.copyWith(y: 3), false);
@@ -383,63 +315,60 @@ void main() {
     });
 
     test('ScatterTouchData equality test', () {
-      final sample = ScatterTouchData(
+      final ScatterTouchData sample = ScatterTouchData(
         touchTooltipData: ScatterTouchTooltipData(
           maxContentWidth: 2,
-          getTooltipColor: scatterChartGetTooltipRedColor,
+          tooltipBgColor: Colors.red,
           tooltipPadding: const EdgeInsets.all(11),
         ),
         handleBuiltInTouches: false,
+        touchCallback: null,
         touchSpotThreshold: 23,
         enabled: false,
       );
-      final sampleClone = ScatterTouchData(
+      final ScatterTouchData sampleClone = ScatterTouchData(
         touchTooltipData: ScatterTouchTooltipData(
           maxContentWidth: 2,
-          getTooltipColor: scatterChartGetTooltipRedColor,
+          tooltipBgColor: Colors.red,
           tooltipPadding: const EdgeInsets.all(11),
         ),
         handleBuiltInTouches: false,
+        touchCallback: null,
         touchSpotThreshold: 23,
         enabled: false,
       );
       expect(sample == sampleClone, true);
 
       expect(
-        sample ==
-            sampleClone.copyWith(
-              touchCallback: (event, response) {},
-            ),
-        false,
-      );
+          sample ==
+              sampleClone.copyWith(
+                touchCallback: (event, response) {},
+              ),
+          false);
       expect(
-        sample ==
-            sampleClone.copyWith(
-              enabled: true,
-            ),
-        false,
-      );
+          sample ==
+              sampleClone.copyWith(
+                enabled: true,
+              ),
+          false);
       expect(
-        sample ==
-            sampleClone.copyWith(
-              touchSpotThreshold: 22,
-            ),
-        false,
-      );
+          sample ==
+              sampleClone.copyWith(
+                touchSpotThreshold: 22,
+              ),
+          false);
       expect(
-        sample ==
-            sampleClone.copyWith(
-              handleBuiltInTouches: true,
-            ),
-        false,
-      );
+          sample ==
+              sampleClone.copyWith(
+                handleBuiltInTouches: true,
+              ),
+          false);
       expect(
-        sample ==
-            sampleClone.copyWith(
-              longPressDuration: Duration.zero,
-            ),
-        false,
-      );
+          sample ==
+              sampleClone.copyWith(
+                longPressDuration: Duration.zero,
+              ),
+          false);
     });
 
     test('ScatterTouchTooltipData equality test', () {
@@ -449,19 +378,19 @@ void main() {
     });
 
     test('ScatterTooltipItem equality test', () {
-      final sample1 = ScatterTooltipItem(
+      final ScatterTooltipItem sample1 = ScatterTooltipItem(
         'aa',
         textStyle: const TextStyle(color: Colors.red),
         bottomMargin: 23,
       );
-      final sample2 = ScatterTooltipItem(
+      final ScatterTooltipItem sample2 = ScatterTooltipItem(
         'aa',
         textStyle: const TextStyle(color: Colors.red),
         bottomMargin: 23,
       );
       expect(sample1 == sample2, true);
 
-      var changed = ScatterTooltipItem(
+      ScatterTooltipItem changed = ScatterTooltipItem(
         'a3a',
         textStyle: const TextStyle(color: Colors.red),
         bottomMargin: 23,
@@ -484,19 +413,19 @@ void main() {
     });
 
     test('ScatterLabelSettings equality test', () {
-      final sample1 = ScatterLabelSettings(
+      final ScatterLabelSettings sample1 = ScatterLabelSettings(
         showLabel: true,
         getLabelTextStyleFunction: getLabelTextStyle,
         getLabelFunction: getLabel,
       );
-      final sample2 = ScatterLabelSettings(
+      final ScatterLabelSettings sample2 = ScatterLabelSettings(
         showLabel: true,
         getLabelTextStyleFunction: getLabelTextStyle,
         getLabelFunction: getLabel,
       );
       expect(sample1 == sample2, true);
 
-      var changed = ScatterLabelSettings(
+      ScatterLabelSettings changed = ScatterLabelSettings(
         showLabel: false,
         getLabelTextStyleFunction: getLabelTextStyle,
         getLabelFunction: getLabel,

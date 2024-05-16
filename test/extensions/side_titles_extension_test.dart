@@ -6,7 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('test totalReservedSize', () {
     expect(
-      const AxisTitles(
+      AxisTitles(
+        axisNameWidget: null,
         axisNameSize: 12,
         sideTitles: SideTitles(
           showTitles: true,
@@ -17,10 +18,11 @@ void main() {
     );
 
     expect(
-      const AxisTitles(
-        axisNameWidget: Text('asdf'),
+      AxisTitles(
+        axisNameWidget: const Text('asdf'),
         axisNameSize: 12,
         sideTitles: SideTitles(
+          showTitles: false,
           reservedSize: 20,
         ),
       ).totalReservedSize,
@@ -28,8 +30,8 @@ void main() {
     );
 
     expect(
-      const AxisTitles(
-        axisNameWidget: Text('asdf'),
+      AxisTitles(
+        axisNameWidget: const Text('asdf'),
         axisNameSize: 12,
         sideTitles: SideTitles(
           showTitles: true,

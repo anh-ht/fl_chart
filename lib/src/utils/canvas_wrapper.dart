@@ -5,19 +5,18 @@ import 'package:fl_chart/src/extensions/path_extension.dart';
 import 'package:fl_chart/src/utils/utils.dart';
 import 'package:flutter/cupertino.dart' hide Image;
 
-typedef DrawCallback = void Function();
-
 /// Proxies Canvas functions
 ///
 /// We wrapped the canvas here, because we needed to write tests for our drawing system.
 /// Now in tests we can verify that these functions called with a specific value.
 class CanvasWrapper {
+  final Canvas canvas;
+  final Size size;
+
   CanvasWrapper(
     this.canvas,
     this.size,
   );
-  final Canvas canvas;
-  final Size size;
 
   /// Directly calls [Canvas.drawRRect]
   void drawRRect(RRect rrect, Paint paint) => canvas.drawRRect(rrect, paint);
@@ -29,11 +28,8 @@ class CanvasWrapper {
   void restore() => canvas.restore();
 
   /// Directly calls [Canvas.clipRect]
-  void clipRect(
-    Rect rect, {
-    ClipOp clipOp = ClipOp.intersect,
-    bool doAntiAlias = true,
-  }) =>
+  void clipRect(Rect rect,
+          {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) =>
       canvas.clipRect(rect, clipOp: clipOp, doAntiAlias: doAntiAlias);
 
   /// Directly calls [Canvas.translate]
@@ -71,13 +67,8 @@ class CanvasWrapper {
       canvas.drawCircle(center, radius, paint);
 
   /// Directly calls [Canvas.drawCircle]
-  void drawArc(
-    Rect rect,
-    double startAngle,
-    double sweepAngle,
-    bool useCenter,
-    Paint paint,
-  ) =>
+  void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter,
+          Paint paint) =>
       canvas.drawArc(rect, startAngle, sweepAngle, useCenter, paint);
 
   /// Paints a text on the [Canvas]
@@ -98,18 +89,6 @@ class CanvasWrapper {
     }
   }
 
-  /// Paints a vertical text on the [Canvas]
-  ///
-  /// Gets a [TextPainter] and call its [TextPainter.paint] using our canvas
-  void drawVerticalText(TextPainter tp, Offset offset) {
-    save();
-    translate(offset.dx, offset.dy);
-    rotate(Utils().radians(90));
-    translate(-offset.dx, -offset.dy);
-    tp.paint(canvas, offset);
-    restore();
-  }
-
   /// Paints a dot using customized [FlDotPainter]
   ///
   /// Paints a customized dot using [FlDotPainter] at the [spot]'s position,
@@ -121,10 +100,10 @@ class CanvasWrapper {
   /// Handles performing multiple draw actions rotated.
   void drawRotated({
     required Size size,
-    Offset rotationOffset = Offset.zero,
-    Offset drawOffset = Offset.zero,
+    Offset rotationOffset = const Offset(0, 0),
+    Offset drawOffset = const Offset(0, 0),
     required double angle,
-    required DrawCallback drawCallback,
+    required void Function() drawCallback,
   }) {
     save();
     translate(
@@ -142,14 +121,10 @@ class CanvasWrapper {
 
   /// Draws a dashed line from passed in offsets
   void drawDashedLine(
-    Offset from,
-    Offset to,
-    Paint painter,
-    List<int>? dashArray,
-  ) {
-    var path = Path()
-      ..moveTo(from.dx, from.dy)
-      ..lineTo(to.dx, to.dy);
+      Offset from, Offset to, Paint painter, List<int>? dashArray) {
+    var path = Path();
+    path.moveTo(from.dx, from.dy);
+    path.lineTo(to.dx, to.dy);
     path = path.toDashedPath(dashArray);
     drawPath(path, painter);
   }

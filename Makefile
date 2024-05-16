@@ -2,13 +2,13 @@ analyze:
 	flutter analyze
 
 checkFormat:
-	dart format -o none --set-exit-if-changed .
+	flutter format --set-exit-if-changed --dry-run .
 
 checkstyle:
 	make analyze && make checkFormat
 
 format:
-	dart format .
+	flutter format .
 
 runTests:
 	flutter test

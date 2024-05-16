@@ -1,8 +1,7 @@
+import '../data_pool.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart/src/chart/scatter_chart/scatter_chart_helper.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../data_pool.dart';
 
 void main() {
   group('Check caching of ScatterChartHelper.calculateMaxAxisValues', () {
@@ -22,7 +21,7 @@ void main() {
       final scatterSpotsClone = [
         scatterSpot1Clone,
         scatterSpot2Clone,
-        scatterSpot3,
+        scatterSpot3
       ];
       final result1 = ScatterChartHelper.calculateMaxAxisValues(scatterSpots);
       final result2 =
@@ -36,7 +35,7 @@ void main() {
         scatterSpot1,
         scatterSpot2,
         scatterSpot3,
-        scatterSpot4,
+        scatterSpot4
       ];
       final result = ScatterChartHelper.calculateMaxAxisValues(scatterSpots);
       expect(result.minX, -14);
@@ -71,7 +70,7 @@ void main() {
       final scatterSpotsClone = [
         scatterSpot1Clone,
         scatterSpot2Clone,
-        scatterSpot3,
+        scatterSpot3
       ];
       final result1 = ScatterChartHelper.calculateMaxAxisValues(scatterSpots);
       final result2 =

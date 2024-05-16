@@ -4,12 +4,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class Utils {
+  static Utils _singleton = Utils._internal();
+
   factory Utils() {
     return _singleton;
   }
 
   Utils._internal();
-  static Utils _singleton = Utils._internal();
 
   @visibleForTesting
   static void changeInstance(Utils val) => _singleton = val;
@@ -49,16 +50,12 @@ class Utils {
     final rotatedWidth = (size.width * cos(radians(degree))).abs() +
         (size.height * sin(radians(degree))).abs();
     return Offset(
-      (size.width - rotatedWidth) / 2,
-      (size.height - rotatedHeight) / 2,
-    );
+        (size.width - rotatedWidth) / 2, (size.height - rotatedHeight) / 2);
   }
 
   /// Decreases [borderRadius] to <= width / 2
   BorderRadius? normalizeBorderRadius(
-    BorderRadius? borderRadius,
-    double width,
-  ) {
+      BorderRadius? borderRadius, double width) {
     if (borderRadius == null) {
       return null;
     }
@@ -129,11 +126,8 @@ class Utils {
   /// then using  [diffInAxis] / allowedCount, we can find out how much interval we need,
   /// then we round that number by finding nearest number in this pattern:
   /// 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 5000, 10000,...
-  double getEfficientInterval(
-    double axisViewSize,
-    double diffInAxis, {
-    double pixelPerInterval = 40,
-  }) {
+  double getEfficientInterval(double axisViewSize, double diffInAxis,
+      {double pixelPerInterval = 40}) {
     final allowedCount = math.max(axisViewSize ~/ pixelPerInterval, 1);
     if (diffInAxis == 0) {
       return 1;
@@ -162,17 +156,17 @@ class Utils {
     }
 
     final inputString = input.toString();
-    var precisionCount = inputString.length - 2;
+    int precisionCount = inputString.length - 2;
 
-    var zeroCount = 0;
-    for (var i = 2; i <= inputString.length; i++) {
+    int zeroCount = 0;
+    for (int i = 2; i <= inputString.length; i++) {
       if (inputString[i] != '0') {
         break;
       }
       zeroCount++;
     }
 
-    final afterZerosNumberLength = precisionCount - zeroCount;
+    int afterZerosNumberLength = precisionCount - zeroCount;
     if (afterZerosNumberLength > 2) {
       final numbersToRemove = afterZerosNumberLength - 2;
       precisionCount -= numbersToRemove;
@@ -211,32 +205,6 @@ class Utils {
   /// kilo (thousands) number
   static const double kilo = 1000;
 
-  /// Returns count of fraction digits of a value
-  int getFractionDigits(double value) {
-    if (value >= 1) {
-      return 1;
-    } else if (value >= 0.1) {
-      return 2;
-    } else if (value >= 0.01) {
-      return 3;
-    } else if (value >= 0.001) {
-      return 4;
-    } else if (value >= 0.0001) {
-      return 5;
-    } else if (value >= 0.00001) {
-      return 6;
-    } else if (value >= 0.000001) {
-      return 7;
-    } else if (value >= 0.0000001) {
-      return 8;
-    } else if (value >= 0.00000001) {
-      return 9;
-    } else if (value >= 0.000000001) {
-      return 10;
-    }
-    return 1;
-  }
-
   /// Formats and add symbols (K, M, B) at the end of number.
   ///
   /// if number is larger than [billion], it returns a short number like 13.3B,
@@ -244,29 +212,26 @@ class Utils {
   /// if number is larger than [kilo], it returns a short number like 4K,
   /// otherwise it returns number itself.
   /// also it removes .0, at the end of number for simplicity.
-  String formatNumber(double axisMin, double axisMax, double axisValue) {
-    final isNegative = axisValue < 0;
+  String formatNumber(double number) {
+    final isNegative = number < 0;
 
     if (isNegative) {
-      axisValue = axisValue.abs();
+      number = number.abs();
     }
 
     String resultNumber;
     String symbol;
-    if (axisValue >= billion) {
-      resultNumber = (axisValue / billion).toStringAsFixed(1);
+    if (number >= billion) {
+      resultNumber = (number / billion).toStringAsFixed(1);
       symbol = 'B';
-    } else if (axisValue >= million) {
-      resultNumber = (axisValue / million).toStringAsFixed(1);
+    } else if (number >= million) {
+      resultNumber = (number / million).toStringAsFixed(1);
       symbol = 'M';
-    } else if (axisValue >= kilo) {
-      resultNumber = (axisValue / kilo).toStringAsFixed(1);
+    } else if (number >= kilo) {
+      resultNumber = (number / kilo).toStringAsFixed(1);
       symbol = 'K';
     } else {
-      final diff = (axisMin - axisMax).abs();
-      resultNumber = axisValue.toStringAsFixed(
-        getFractionDigits(diff),
-      );
+      resultNumber = number.toStringAsFixed(1);
       symbol = '';
     }
 
@@ -278,24 +243,18 @@ class Utils {
       resultNumber = '-$resultNumber';
     }
 
-    if (resultNumber == '-0') {
-      resultNumber = '0';
-    }
-
     return resultNumber + symbol;
   }
 
   /// Returns a TextStyle based on provided [context], if [providedStyle] provided we try to merge it.
   TextStyle getThemeAwareTextStyle(
-    BuildContext context,
-    TextStyle? providedStyle,
-  ) {
+      BuildContext context, TextStyle? providedStyle) {
     final defaultTextStyle = DefaultTextStyle.of(context);
     var effectiveTextStyle = providedStyle;
     if (providedStyle == null || providedStyle.inherit) {
       effectiveTextStyle = defaultTextStyle.style.merge(providedStyle);
     }
-    if (MediaQuery.boldTextOf(context)) {
+    if (MediaQuery.boldTextOverride(context)) {
       effectiveTextStyle = effectiveTextStyle!
           .merge(const TextStyle(fontWeight: FontWeight.bold));
     }
@@ -304,17 +263,13 @@ class Utils {
 
   /// Finds the best initial interval value
   ///
-  /// If there is a zero point in the axis, we want to have a value that passes through it.
+  /// If there is a zero point in the axis, we a value that passes through it.
   /// For example if we have -3 to +3, with interval 2. if we start from -3, we get something like this: -3, -1, +1, +3
   /// But the most important point is zero in most cases. with this logic we get this: -2, 0, 2
-  double getBestInitialIntervalValue(
-    double min,
-    double max,
-    double interval, {
-    double baseline = 0.0,
-  }) {
-    final diff = baseline - min;
-    final mod = diff % interval;
+  double getBestInitialIntervalValue(double min, double max, double interval,
+      {double baseline = 0.0}) {
+    final diff = (baseline - min);
+    final mod = (diff % interval);
     if ((max - min).abs() <= mod) {
       return min;
     }

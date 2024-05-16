@@ -1,5 +1,4 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/chart/bar_chart/bar_chart_helper.dart';
 import 'package:fl_chart/src/chart/base/axis_chart/side_titles/side_titles_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +14,7 @@ void main() {
   );
 
   final lineChartDataWithNoTitles = lineChartDataBase.copyWith(
-    titlesData: const FlTitlesData(
+    titlesData: FlTitlesData(
       show: false,
       leftTitles: AxisTitles(),
       topTitles: AxisTitles(),
@@ -26,12 +25,13 @@ void main() {
 
   final lineChartDataWithAllTitles = lineChartDataBase.copyWith(
     titlesData: FlTitlesData(
+      show: true,
       leftTitles: AxisTitles(
         axisNameWidget: const Text('Left Titles'),
         sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('L-${value.toInt()}');
+            return Text('L-${value.toInt().toString()}');
           },
           interval: 1,
         ),
@@ -41,7 +41,7 @@ void main() {
         sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('T-${value.toInt()}');
+            return Text('T-${value.toInt().toString()}');
           },
           interval: 1,
         ),
@@ -51,7 +51,7 @@ void main() {
         sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('R-${value.toInt()}');
+            return Text('R-${value.toInt().toString()}');
           },
           interval: 1,
         ),
@@ -61,7 +61,7 @@ void main() {
         sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('B-${value.toInt()}');
+            return Text('B-${value.toInt().toString()}');
           },
           interval: 1,
         ),
@@ -71,37 +71,39 @@ void main() {
 
   final lineChartDataWithOnlyLeftTitles = lineChartDataBase.copyWith(
     titlesData: FlTitlesData(
+      show: true,
       leftTitles: AxisTitles(
         axisNameWidget: const Text('Left Titles'),
         sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('L-${value.toInt()}');
+            return Text('L-${value.toInt().toString()}');
           },
           interval: 1,
         ),
       ),
-      topTitles: const AxisTitles(),
-      rightTitles: const AxisTitles(),
-      bottomTitles: const AxisTitles(),
+      topTitles: AxisTitles(),
+      rightTitles: AxisTitles(),
+      bottomTitles: AxisTitles(),
     ),
   );
 
   final lineChartDataWithOnlyLeftTitlesWithoutAxisName =
       lineChartDataBase.copyWith(
     titlesData: FlTitlesData(
+      show: true,
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('L-${value.toInt()}');
+            return Text('L-${value.toInt().toString()}');
           },
           interval: 1,
         ),
       ),
-      topTitles: const AxisTitles(),
-      rightTitles: const AxisTitles(),
-      bottomTitles: const AxisTitles(),
+      topTitles: AxisTitles(),
+      rightTitles: AxisTitles(),
+      bottomTitles: AxisTitles(),
     ),
   );
 
@@ -127,9 +129,10 @@ void main() {
       ),
     ],
     titlesData: FlTitlesData(
-      leftTitles: const AxisTitles(),
-      topTitles: const AxisTitles(),
-      rightTitles: const AxisTitles(),
+      show: true,
+      leftTitles: AxisTitles(),
+      topTitles: AxisTitles(),
+      rightTitles: AxisTitles(),
       bottomTitles: AxisTitles(
         axisNameWidget: const Icon(Icons.check),
         sideTitles: SideTitles(
@@ -147,8 +150,8 @@ void main() {
     ),
   );
 
-  BarChartData createBarChartDataWithOnlyRightTitles() {
-    final barGroups = <BarChartGroupData>[
+  final barChartDataWithOnlyRightTitles = BarChartData(
+    barGroups: [
       BarChartGroupData(
         x: 0,
         barRods: [
@@ -167,67 +170,54 @@ void main() {
           BarChartRodData(toY: 10),
         ],
       ),
-    ];
-
-    final axisValues = BarChartHelper().calculateMaxAxisValues(barGroups);
-
-    return BarChartData(
-      barGroups: barGroups,
-      titlesData: FlTitlesData(
-        leftTitles: const AxisTitles(),
-        topTitles: const AxisTitles(),
-        rightTitles: AxisTitles(
-          axisNameWidget: const Icon(Icons.arrow_right),
-          sideTitles: SideTitles(
-            showTitles: true,
-            interval: 1,
-            getTitlesWidget: (value, meta) {
-              return TextButton(
-                onPressed: () {},
-                child: Text(
-                  value.toInt().toString(),
-                ),
-              );
-            },
-          ),
+    ],
+    titlesData: FlTitlesData(
+      show: true,
+      leftTitles: AxisTitles(),
+      topTitles: AxisTitles(),
+      rightTitles: AxisTitles(
+        axisNameWidget: const Icon(Icons.arrow_right),
+        sideTitles: SideTitles(
+          showTitles: true,
+          interval: 1,
+          getTitlesWidget: (value, meta) {
+            return TextButton(
+              onPressed: () {},
+              child: Text(
+                value.toInt().toString(),
+              ),
+            );
+          },
         ),
-        bottomTitles: const AxisTitles(),
       ),
-      minY: axisValues.minY,
-      maxY: axisValues.maxY,
-    );
-  }
+      bottomTitles: AxisTitles(),
+    ),
+  );
 
-  BarChartData createBarChartDataWithEmptyGroups() {
-    final barGroups = <BarChartGroupData>[];
-    final axisValues = BarChartHelper().calculateMaxAxisValues(barGroups);
-
-    return BarChartData(
-      barGroups: [],
-      titlesData: FlTitlesData(
-        leftTitles: const AxisTitles(),
-        topTitles: const AxisTitles(),
-        rightTitles: AxisTitles(
-          axisNameWidget: const Icon(Icons.arrow_right),
-          sideTitles: SideTitles(
-            showTitles: true,
-            interval: 1,
-            getTitlesWidget: (value, meta) {
-              return TextButton(
-                onPressed: () {},
-                child: Text(
-                  value.toInt().toString(),
-                ),
-              );
-            },
-          ),
+  final barChartDataWithEmptyGroups = BarChartData(
+    barGroups: [],
+    titlesData: FlTitlesData(
+      show: true,
+      leftTitles: AxisTitles(),
+      topTitles: AxisTitles(),
+      rightTitles: AxisTitles(
+        axisNameWidget: const Icon(Icons.arrow_right),
+        sideTitles: SideTitles(
+          showTitles: true,
+          interval: 1,
+          getTitlesWidget: (value, meta) {
+            return TextButton(
+              onPressed: () {},
+              child: Text(
+                value.toInt().toString(),
+              ),
+            );
+          },
         ),
-        bottomTitles: const AxisTitles(),
       ),
-      minY: axisValues.minY,
-      maxY: axisValues.maxY,
-    );
-  }
+      bottomTitles: AxisTitles(),
+    ),
+  );
 
   testWidgets(
     'LineChart with no titles',
@@ -276,14 +266,25 @@ void main() {
           ),
         );
 
-        final axisName = switch (side) {
-          AxisSide.left => 'Left',
-          AxisSide.top => 'Top',
-          AxisSide.right => 'Right',
-          AxisSide.bottom => 'Bottom',
-        };
+        String axisName;
+        switch (side) {
+          case AxisSide.left:
+            axisName = 'Left';
+            break;
+          case AxisSide.top:
+            axisName = 'Top';
+            break;
+          case AxisSide.right:
+            axisName = 'Right';
+            break;
+          case AxisSide.bottom:
+            axisName = 'Bottom';
+            break;
+          default:
+            throw StateError('Invalid');
+        }
         expect(find.text('$axisName Titles'), findsOneWidget);
-        for (var i = 0; i <= 10; i++) {
+        for (int i = 0; i <= 10; i++) {
           expect(find.text('${axisName.characters.first}-$i'), findsOneWidget);
         }
       }
@@ -316,7 +317,7 @@ void main() {
         ),
       );
       expect(find.text('Left Titles'), findsOneWidget);
-      for (var i = 0; i <= 10; i++) {
+      for (int i = 0; i <= 10; i++) {
         expect(find.text('L-$i'), findsOneWidget);
       }
 
@@ -344,7 +345,7 @@ void main() {
           ),
         ),
       );
-      for (var i = 0; i <= 10; i++) {
+      for (int i = 0; i <= 10; i++) {
         expect(find.text('L-$i'), findsOneWidget);
       }
 
@@ -393,7 +394,7 @@ void main() {
                 height: viewSize.height,
                 child: SideTitlesWidget(
                   side: AxisSide.right,
-                  axisChartData: createBarChartDataWithOnlyRightTitles(),
+                  axisChartData: barChartDataWithOnlyRightTitles,
                   parentSize: viewSize,
                 ),
               ),
@@ -403,7 +404,7 @@ void main() {
       );
 
       expect(find.byIcon(Icons.arrow_right), findsOneWidget);
-      for (var i = 0; i <= 10; i++) {
+      for (int i = 0; i <= 10; i++) {
         expect(find.text('$i'), findsOneWidget);
       }
       expect(find.byType(TextButton), findsNWidgets(11));
@@ -422,7 +423,7 @@ void main() {
                 height: viewSize.height,
                 child: SideTitlesWidget(
                   side: AxisSide.right,
-                  axisChartData: createBarChartDataWithEmptyGroups(),
+                  axisChartData: barChartDataWithEmptyGroups,
                   parentSize: viewSize,
                 ),
               ),

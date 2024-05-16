@@ -8,12 +8,12 @@ void main() {
 
     expect(
       input.onlyTopBottom,
-      const EdgeInsets.symmetric(vertical: 20),
+      const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
     );
 
     expect(
       input.onlyLeftRight,
-      const EdgeInsets.symmetric(horizontal: 10),
+      const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
     );
   });
 }

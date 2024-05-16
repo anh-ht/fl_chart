@@ -1,11 +1,17 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/chart/bar_chart/bar_chart_helper.dart';
 import 'package:fl_chart/src/chart/bar_chart/bar_chart_renderer.dart';
 import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_scaffold_widget.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Renders a bar chart as a widget, using provided [BarChartData].
 class BarChart extends ImplicitlyAnimatedWidget {
+  /// Determines how the [BarChart] should be look like.
+  final BarChartData data;
+
+  /// We pass this key to our renderers which are supposed to
+  /// render the chart itself (without anything around the chart).
+  final Key? chartRendererKey;
+
   /// [data] determines how the [BarChart] should be look like,
   /// when you make any change in the [BarChartData], it updates
   /// new values with animation, and duration is [swapAnimationDuration].
@@ -14,20 +20,13 @@ class BarChart extends ImplicitlyAnimatedWidget {
   const BarChart(
     this.data, {
     this.chartRendererKey,
-    super.key,
+    Key? key,
     Duration swapAnimationDuration = const Duration(milliseconds: 150),
     Curve swapAnimationCurve = Curves.linear,
   }) : super(
-          duration: swapAnimationDuration,
-          curve: swapAnimationCurve,
-        );
-
-  /// Determines how the [BarChart] should be look like.
-  final BarChartData data;
-
-  /// We pass this key to our renderers which are supposed to
-  /// render the chart itself (without anything around the chart).
-  final Key? chartRendererKey;
+            key: key,
+            duration: swapAnimationDuration,
+            curve: swapAnimationCurve);
 
   /// Creates a [_BarChartState]
   @override
@@ -44,8 +43,6 @@ class _BarChartState extends AnimatedWidgetBaseState<BarChart> {
   BaseTouchCallback<BarTouchResponse>? _providedTouchCallback;
 
   final Map<int, List<int>> _showingTouchedTooltips = {};
-
-  final _barChartHelper = BarChartHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -84,39 +81,27 @@ class _BarChartState extends AnimatedWidgetBaseState<BarChart> {
   }
 
   BarChartData _getData() {
-    var newData = widget.data;
-    if (newData.minY.isNaN || newData.maxY.isNaN) {
-      final values = _barChartHelper.calculateMaxAxisValues(newData.barGroups);
-      newData = newData.copyWith(
-        minY: newData.minY.isNaN ? values.minY : newData.minY,
-        maxY: newData.maxY.isNaN ? values.maxY : newData.maxY,
-      );
-    }
-
-    final barTouchData = newData.barTouchData;
+    final barTouchData = widget.data.barTouchData;
     if (barTouchData.enabled && barTouchData.handleBuiltInTouches) {
       _providedTouchCallback = barTouchData.touchCallback;
-      return newData.copyWith(
-        barTouchData:
-            newData.barTouchData.copyWith(touchCallback: _handleBuiltInTouch),
+      return widget.data.copyWith(
+        barTouchData: widget.data.barTouchData
+            .copyWith(touchCallback: _handleBuiltInTouch),
       );
     }
-    return newData;
+    return widget.data;
   }
 
   void _handleBuiltInTouch(
-    FlTouchEvent event,
-    BarTouchResponse? touchResponse,
-  ) {
-    if (!mounted) {
-      return;
-    }
+      FlTouchEvent event, BarTouchResponse? touchResponse) {
     _providedTouchCallback?.call(event, touchResponse);
 
     if (!event.isInterestedForInteractions ||
         touchResponse == null ||
         touchResponse.spot == null) {
-      setState(_showingTouchedTooltips.clear);
+      setState(() {
+        _showingTouchedTooltips.clear();
+      });
       return;
     }
     setState(() {
@@ -130,12 +115,12 @@ class _BarChartState extends AnimatedWidgetBaseState<BarChart> {
   }
 
   @override
-  void forEachTween(TweenVisitor<dynamic> visitor) {
+  void forEachTween(visitor) {
     _barChartDataTween = visitor(
       _barChartDataTween,
-      _getData(),
+      widget.data,
       (dynamic value) =>
           BarChartDataTween(begin: value as BarChartData, end: widget.data),
-    ) as BarChartDataTween?;
+    ) as BarChartDataTween;
   }
 }

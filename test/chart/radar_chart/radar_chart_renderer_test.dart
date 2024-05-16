@@ -1,56 +1,54 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:fl_chart/src/chart/radar_chart/radar_chart_painter.dart';
 import 'package:fl_chart/src/chart/radar_chart/radar_chart_renderer.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-
 import '../data_pool.dart';
 import 'radar_chart_renderer_test.mocks.dart';
 
 @GenerateMocks([Canvas, PaintingContext, BuildContext, RadarChartPainter])
 void main() {
   group('RadarChartRenderer', () {
-    final data = RadarChartData(
+    final RadarChartData data = RadarChartData(
       dataSets: [MockData.radarDataSet1],
       tickCount: 1,
     );
 
-    final targetData = RadarChartData(
+    final RadarChartData targetData = RadarChartData(
       dataSets: [MockData.radarDataSet2],
       tickCount: 1,
     );
 
-    const textScaler = TextScaler.linear(4);
+    const textScale = 4.0;
 
-    final mockBuildContext = MockBuildContext();
-    final renderRadarChart = RenderRadarChart(
+    MockBuildContext mockBuildContext = MockBuildContext();
+    RenderRadarChart renderRadarChart = RenderRadarChart(
       mockBuildContext,
       data,
       targetData,
-      textScaler,
+      textScale,
     );
 
-    final mockPainter = MockRadarChartPainter();
-    final mockPaintingContext = MockPaintingContext();
-    final mockCanvas = MockCanvas();
-    const mockSize = Size(44, 44);
+    MockRadarChartPainter mockPainter = MockRadarChartPainter();
+    MockPaintingContext mockPaintingContext = MockPaintingContext();
+    MockCanvas mockCanvas = MockCanvas();
+    Size mockSize = const Size(44, 44);
     when(mockPaintingContext.canvas).thenAnswer((realInvocation) => mockCanvas);
-    renderRadarChart
-      ..mockTestSize = mockSize
-      ..painter = mockPainter;
+    renderRadarChart.mockTestSize = mockSize;
+    renderRadarChart.painter = mockPainter;
 
     test('test 1 correct data set', () {
       expect(renderRadarChart.data == data, true);
       expect(renderRadarChart.data == targetData, false);
       expect(renderRadarChart.targetData == targetData, true);
-      expect(renderRadarChart.textScaler == textScaler, true);
+      expect(renderRadarChart.textScale == textScale, true);
       expect(renderRadarChart.paintHolder.data == data, true);
       expect(renderRadarChart.paintHolder.targetData == targetData, true);
-      expect(renderRadarChart.paintHolder.textScaler == textScaler, true);
+      expect(renderRadarChart.paintHolder.textScale == textScale, true);
     });
 
     test('test 2 check paint function', () {
@@ -67,19 +65,19 @@ void main() {
       final paintHolder = result.captured[1] as PaintHolder;
       expect(paintHolder.data, data);
       expect(paintHolder.targetData, targetData);
-      expect(paintHolder.textScaler, textScaler);
+      expect(paintHolder.textScale, textScale);
 
       verify(mockCanvas.restore()).called(1);
     });
 
     test('test 3 check getResponseAtLocation function', () {
-      final results = <Map<String, dynamic>>[];
+      List<Map<String, dynamic>> results = [];
       when(mockPainter.handleTouch(captureAny, captureAny, captureAny))
           .thenAnswer((inv) {
         results.add({
           'local_position': inv.positionalArguments[0] as Offset,
           'size': inv.positionalArguments[1] as Size,
-          'paint_holder': inv.positionalArguments[2] as PaintHolder,
+          'paint_holder': (inv.positionalArguments[2] as PaintHolder),
         });
         return MockData.radarTouchedSpot;
       });
@@ -91,18 +89,17 @@ void main() {
       final paintHolder = results[0]['paint_holder'] as PaintHolder;
       expect(paintHolder.data, data);
       expect(paintHolder.targetData, targetData);
-      expect(paintHolder.textScaler, textScaler);
+      expect(paintHolder.textScale, textScale);
     });
 
     test('test 4 check setters', () {
-      renderRadarChart
-        ..data = targetData
-        ..targetData = data
-        ..textScaler = const TextScaler.linear(22);
+      renderRadarChart.data = targetData;
+      renderRadarChart.targetData = data;
+      renderRadarChart.textScale = 22;
 
       expect(renderRadarChart.data, targetData);
       expect(renderRadarChart.targetData, data);
-      expect(renderRadarChart.textScaler, const TextScaler.linear(22));
+      expect(renderRadarChart.textScale, 22);
     });
   });
 }

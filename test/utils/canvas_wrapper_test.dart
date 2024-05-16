@@ -1,9 +1,8 @@
 import 'dart:ui';
 
-import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_data.dart';
+import 'package:fl_chart/src/chart/line_chart/line_chart_data.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
 import 'package:fl_chart/src/utils/utils.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -12,8 +11,8 @@ import 'canvas_wrapper_test.mocks.dart';
 
 @GenerateMocks([Canvas, FlDotPainter, Utils])
 void main() {
-  final mockCanvas = MockCanvas();
-  final canvasWrapper = CanvasWrapper(mockCanvas, MockData.size1);
+  MockCanvas mockCanvas = MockCanvas();
+  CanvasWrapper canvasWrapper = CanvasWrapper(mockCanvas, MockData.size1);
 
   test('test drawRRect', () {
     canvasWrapper.drawRRect(MockData.rRect1, MockData.paint1);
@@ -72,13 +71,11 @@ void main() {
 
   test('test drawLine', () {
     canvasWrapper.drawLine(MockData.offset1, MockData.offset2, MockData.paint1);
-    verify(
-      mockCanvas.drawLine(
-        MockData.offset1,
-        MockData.offset2,
-        MockData.paint1,
-      ),
-    ).called(1);
+    verify(mockCanvas.drawLine(
+      MockData.offset1,
+      MockData.offset2,
+      MockData.paint1,
+    )).called(1);
   });
 
   test('test drawCircle', () {
@@ -94,14 +91,13 @@ void main() {
   });
 
   test('test drawDot', () {
-    final painter = MockFlDotPainter();
+    MockFlDotPainter painter = MockFlDotPainter();
     canvasWrapper.drawDot(painter, MockData.lineBarSpot1, MockData.offset1);
     verify(painter.draw(mockCanvas, MockData.lineBarSpot1, MockData.offset1))
         .called(1);
   });
 
   test('test drawRotated', () {
-    final utilsMainInstance = Utils();
     final mockUtils = MockUtils();
     when(mockUtils.radians(any)).thenAnswer((realInvocation) => 12);
     Utils.changeInstance(mockUtils);
@@ -123,30 +119,6 @@ void main() {
     verify(mockCanvas.rotate(12)).called(1);
     verify(mockCanvas.translate(-122, -122)).called(1);
     expect(calledCallback, true);
-    verify(mockCanvas.restore()).called(1);
-    Utils.changeInstance(utilsMainInstance);
-  });
-
-  test('test drawText', () {
-    final tp = MockData.textPainter2;
-    canvasWrapper.drawText(tp, MockData.offset1);
-    verify(tp.paint(mockCanvas, MockData.offset1)).called(1);
-  });
-
-  test('test drawVerticalText', () {
-    final tp = MockData.textPainter2;
-    final mockUtils = MockUtils();
-    when(mockUtils.radians(any)).thenAnswer((realInvocation) => 90);
-    Utils.changeInstance(mockUtils);
-
-    canvasWrapper.drawVerticalText(tp, MockData.offset1);
-    verify(mockCanvas.save()).called(1);
-    verify(mockCanvas.translate(MockData.offset1.dx, MockData.offset1.dy))
-        .called(1);
-    verify(mockCanvas.rotate(90)).called(1);
-    verify(mockCanvas.translate(-MockData.offset1.dx, -MockData.offset1.dy))
-        .called(1);
-    verify(tp.paint(mockCanvas, MockData.offset1)).called(1);
     verify(mockCanvas.restore()).called(1);
   });
 }

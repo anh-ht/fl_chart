@@ -3,17 +3,18 @@ import 'package:fl_chart/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'utils_test.mocks.dart';
 
 import '../chart/data_pool.dart';
-import 'utils_test.mocks.dart';
 
 @GenerateMocks([Utils, BuildContext])
 void main() {
   const tolerance = 0.001;
 
   test('changeInstance', () {
-    final Utils mockUtils = MockUtils();
-    final realUtils = Utils();
+    Utils mockUtils = MockUtils();
+    Utils realUtils = Utils();
     expect(Utils(), realUtils);
     Utils.changeInstance(mockUtils);
     expect(Utils(), mockUtils);
@@ -37,37 +38,23 @@ void main() {
   });
 
   test('test default size', () {
-    expect(
-      Utils().getDefaultSize(const Size(1080, 1920)).width,
-      closeTo(756, tolerance),
-    );
-    expect(
-      Utils().getDefaultSize(const Size(1080, 1920)).height,
-      closeTo(756, tolerance),
-    );
+    expect(Utils().getDefaultSize(const Size(1080, 1920)).width,
+        closeTo(756, tolerance));
+    expect(Utils().getDefaultSize(const Size(1080, 1920)).height,
+        closeTo(756, tolerance));
 
-    expect(
-      Utils().getDefaultSize(const Size(728, 1080)).width,
-      closeTo(509.6, tolerance),
-    );
-    expect(
-      Utils().getDefaultSize(const Size(728, 1080)).height,
-      closeTo(509.6, tolerance),
-    );
+    expect(Utils().getDefaultSize(const Size(728, 1080)).width,
+        closeTo(509.6, tolerance));
+    expect(Utils().getDefaultSize(const Size(728, 1080)).height,
+        closeTo(509.6, tolerance));
 
-    expect(
-      Utils().getDefaultSize(const Size(2560, 1600)).width,
-      closeTo(1120, tolerance),
-    );
-    expect(
-      Utils().getDefaultSize(const Size(2560, 1600)).height,
-      closeTo(1120, tolerance),
-    );
+    expect(Utils().getDefaultSize(const Size(2560, 1600)).width,
+        closeTo(1120, tolerance));
+    expect(Utils().getDefaultSize(const Size(2560, 1600)).height,
+        closeTo(1120, tolerance));
 
-    expect(
-      Utils().getDefaultSize(const Size(1000, 1000)).width,
-      closeTo(700, tolerance),
-    );
+    expect(Utils().getDefaultSize(const Size(1000, 1000)).width,
+        closeTo(700, tolerance));
   });
 
   test('translate rotated position', () {
@@ -140,39 +127,29 @@ void main() {
   });
 
   test('normalizeBorderSide()', () {
-    const input1 = BorderSide(width: 4);
+    const input1 = BorderSide(width: 4.0);
     const output1 = input1;
     expect(Utils().normalizeBorderSide(input1, 40), output1);
 
-    const input2 = BorderSide(width: 24);
-    const output2 = BorderSide(width: 20);
+    const input2 = BorderSide(width: 24.0);
+    const output2 = BorderSide(width: 20.0);
     expect(Utils().normalizeBorderSide(input2, 40), output2);
   });
 
   test('lerp gradient', () {
     expect(
-      lerpGradient(
-        [
+        lerpGradient([
           Colors.red,
           Colors.green,
-        ],
-        [],
-        0,
-      ),
-      Colors.red,
-    );
+        ], [], 0.0),
+        Colors.red);
 
     expect(
-      lerpGradient(
-        [
+        lerpGradient([
           Colors.red,
           Colors.green,
-        ],
-        [],
-        1,
-      ),
-      Colors.green,
-    );
+        ], [], 1.0),
+        Colors.green);
   });
 
   test('test roundInterval', () {
@@ -187,128 +164,101 @@ void main() {
     expect(Utils().roundInterval(0.000990000000), 0.001);
     expect(Utils().roundInterval(0.00000990000), 0.00001000);
     expect(Utils().roundInterval(0.0000009), 0.0000009);
-    expect(
-      Utils().roundInterval(0.000000000000000000990000000),
-      0.000000000000000000990000000,
-    );
+    expect(Utils().roundInterval(0.000000000000000000990000000),
+        0.000000000000000000990000000);
     expect(Utils().roundInterval(0.000004901960784313726), 0.000005);
   });
 
   test('test Utils().getEfficientInterval', () {
     expect(Utils().getEfficientInterval(472, 340, pixelPerInterval: 10), 5);
     expect(Utils().getEfficientInterval(820, 10000, pixelPerInterval: 10), 100);
+    expect(Utils().getEfficientInterval(1024, 412345234, pixelPerInterval: 10),
+        5000000);
     expect(
-      Utils().getEfficientInterval(1024, 412345234, pixelPerInterval: 10),
-      5000000,
-    );
+        Utils().getEfficientInterval(720, 812394712349, pixelPerInterval: 10),
+        10000000000);
     expect(
-      Utils().getEfficientInterval(720, 812394712349, pixelPerInterval: 10),
-      10000000000,
-    );
-    expect(
-      Utils().getEfficientInterval(1024, 0.01, pixelPerInterval: 100),
-      0.001,
-    );
-    expect(
-      Utils().getEfficientInterval(1024, 0.0005, pixelPerInterval: 10),
-      0.000005,
-    );
+        Utils().getEfficientInterval(1024, 0.01, pixelPerInterval: 100), 0.001);
+    expect(Utils().getEfficientInterval(1024, 0.0005, pixelPerInterval: 10),
+        0.000005);
     expect(Utils().getEfficientInterval(200, 0.5, pixelPerInterval: 20), 0.05);
-    expect(Utils().getEfficientInterval(200, 1, pixelPerInterval: 20), 0.1);
+    expect(Utils().getEfficientInterval(200, 1.0, pixelPerInterval: 20), 0.1);
     expect(Utils().getEfficientInterval(100, 0.5, pixelPerInterval: 20), 0.1);
     expect(Utils().getEfficientInterval(10, 10), 10);
     expect(Utils().getEfficientInterval(10, 0), 1);
   });
 
-  test('test getFractionDigits', () {
-    expect(Utils().getFractionDigits(1), 1);
-    expect(Utils().getFractionDigits(343), 1);
-    expect(Utils().getFractionDigits(22), 1);
-    expect(Utils().getFractionDigits(444444), 1);
-    expect(Utils().getFractionDigits(0.9), 2);
-    expect(Utils().getFractionDigits(0.1), 2);
-    expect(Utils().getFractionDigits(0.01), 3);
-    expect(Utils().getFractionDigits(0.001), 4);
-    expect(Utils().getFractionDigits(0.009), 4);
-    expect(Utils().getFractionDigits(0.008), 4);
-    expect(Utils().getFractionDigits(0.0001), 5);
-    expect(Utils().getFractionDigits(0.0009), 5);
-    expect(Utils().getFractionDigits(0.00001), 6);
-    expect(Utils().getFractionDigits(0.000001), 7);
-    expect(Utils().getFractionDigits(0.0000001), 8);
-    expect(Utils().getFractionDigits(0.00000001), 9);
-  });
-
   test('test formatNumber', () {
-    expect(Utils().formatNumber(0, 10, 0), '0');
-    expect(Utils().formatNumber(0, 10, -0), '0');
-    expect(Utils().formatNumber(0, 10, -0.01), '0');
-    expect(Utils().formatNumber(0, 10, 0.01), '0');
-    expect(Utils().formatNumber(0, 10, -0.1), '-0.1');
-    expect(Utils().formatNumber(0, 10, 423), '423');
-    expect(Utils().formatNumber(0, 10, -423), '-423');
-    expect(Utils().formatNumber(0, 10, 1000), '1K');
-    expect(Utils().formatNumber(0, 10, 1234), '1.2K');
-    expect(Utils().formatNumber(0, 10, 10000), '10K');
-    expect(Utils().formatNumber(0, 10, 41234), '41.2K');
-    expect(Utils().formatNumber(0, 10, 82349), '82.3K');
-    expect(Utils().formatNumber(0, 10, 82350), '82.3K');
-    expect(Utils().formatNumber(0, 10, 82351), '82.4K');
-    expect(Utils().formatNumber(0, 10, -82351), '-82.4K');
-    expect(Utils().formatNumber(0, 10, 100000), '100K');
-    expect(Utils().formatNumber(0, 10, 101000), '101K');
-    expect(Utils().formatNumber(0, 10, 2345123), '2.3M');
-    expect(Utils().formatNumber(0, 10, 2352123), '2.4M');
-    expect(Utils().formatNumber(0, 10, -2352123), '-2.4M');
-    expect(Utils().formatNumber(0, 10, 521000000), '521M');
-    expect(Utils().formatNumber(0, 10, 4324512345), '4.3B');
-    expect(Utils().formatNumber(0, 10, 4000000000), '4B');
-    expect(Utils().formatNumber(0, 10, -4000000000), '-4B');
-    expect(Utils().formatNumber(0, 10, 823147521343), '823.1B');
-    expect(Utils().formatNumber(0, 10, 8231475213435), '8231.5B');
-    expect(Utils().formatNumber(0, 10, -8231475213435), '-8231.5B');
+    expect(Utils().formatNumber(0), '0');
+    expect(Utils().formatNumber(423), '423');
+    expect(Utils().formatNumber(-423), '-423');
+    expect(Utils().formatNumber(1000), '1K');
+    expect(Utils().formatNumber(1234), '1.2K');
+    expect(Utils().formatNumber(10000), '10K');
+    expect(Utils().formatNumber(41234), '41.2K');
+    expect(Utils().formatNumber(82349), '82.3K');
+    expect(Utils().formatNumber(82350), '82.3K');
+    expect(Utils().formatNumber(82351), '82.4K');
+    expect(Utils().formatNumber(-82351), '-82.4K');
+    expect(Utils().formatNumber(100000), '100K');
+    expect(Utils().formatNumber(101000), '101K');
+    expect(Utils().formatNumber(2345123), '2.3M');
+    expect(Utils().formatNumber(2352123), '2.4M');
+    expect(Utils().formatNumber(-2352123), '-2.4M');
+    expect(Utils().formatNumber(521000000), '521M');
+    expect(Utils().formatNumber(4324512345), '4.3B');
+    expect(Utils().formatNumber(4000000000), '4B');
+    expect(Utils().formatNumber(-4000000000), '-4B');
+    expect(Utils().formatNumber(823147521343), '823.1B');
+    expect(Utils().formatNumber(8231475213435), '8231.5B');
+    expect(Utils().formatNumber(-8231475213435), '-8231.5B');
   });
 
   group('test getThemeAwareTextStyle', () {
-    testWidgets('test 1', (WidgetTester tester) async {
-      const style = TextStyle(color: Colors.brown);
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: DefaultTextStyle(
-              style: style,
-              child: Container(),
-            ),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      final context = tester.element(find.byType(Container));
+    test('test 1', () {
+      final mockBuildContext = MockBuildContext();
+      const defaultTextStyle = DefaultTextStyle.fallback();
 
+      var callCount = 0;
+      when(mockBuildContext.dependOnInheritedWidgetOfExactType())
+          .thenAnswer((realInvocation) {
+        if (callCount == 0) {
+          callCount++;
+          return defaultTextStyle;
+        } else {
+          return MediaQuery(
+            data: const MediaQueryData(boldText: false),
+            child: Container(),
+          );
+        }
+      });
       expect(
-        Utils().getThemeAwareTextStyle(context, style),
-        style,
+        Utils().getThemeAwareTextStyle(mockBuildContext, null),
+        defaultTextStyle.style,
       );
     });
 
-    testWidgets('test 2', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: MediaQuery(
-              data: const MediaQueryData(boldText: true),
-              child: Container(),
-            ),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      final context = tester.element(find.byType(Container));
+    test('test 2', () {
+      final mockBuildContext = MockBuildContext();
+      const defaultTextStyle = DefaultTextStyle.fallback();
 
+      var callCount = 0;
+      when(mockBuildContext.dependOnInheritedWidgetOfExactType())
+          .thenAnswer((realInvocation) {
+        if (callCount == 0) {
+          callCount++;
+          return defaultTextStyle;
+        } else {
+          return MediaQuery(
+            data: const MediaQueryData(boldText: true),
+            child: Container(),
+          );
+        }
+      });
       expect(
         Utils()
             .getThemeAwareTextStyle(
-              context,
+              mockBuildContext,
               MockData.textStyle1,
             )
             .fontWeight,
@@ -356,28 +306,19 @@ void main() {
     expect(Utils().getBestInitialIntervalValue(-10, 10, 2, baseline: -20), -10);
     expect(Utils().getBestInitialIntervalValue(-10, 10, 15, baseline: -30), 0);
     expect(Utils().getBestInitialIntervalValue(0, 20, 8, baseline: 28), 4);
-    expect(Utils().getBestInitialIntervalValue(130, 140, 50), 130);
-    expect(Utils().getBestInitialIntervalValue(145, 155, 50), 150);
+    expect(Utils().getBestInitialIntervalValue(130, 140, 50, baseline: 0), 130);
+    expect(Utils().getBestInitialIntervalValue(145, 155, 50, baseline: 0), 150);
     expect(
-      Utils().getBestInitialIntervalValue(-200, -180, 30),
-      -200,
-    );
+        Utils().getBestInitialIntervalValue(-200, -180, 30, baseline: 0), -200);
     expect(
-      Utils().getBestInitialIntervalValue(-190, -170, 30),
-      -180,
-    );
+        Utils().getBestInitialIntervalValue(-190, -170, 30, baseline: 0), -180);
     expect(
-      Utils().getBestInitialIntervalValue(-2000, 2000, 100, baseline: -10000),
-      -2000,
-    );
+        Utils().getBestInitialIntervalValue(-2000, 2000, 100, baseline: -10000),
+        -2000);
+    expect(Utils().getBestInitialIntervalValue(-120, 120, 33, baseline: -200),
+        -101);
     expect(
-      Utils().getBestInitialIntervalValue(-120, 120, 33, baseline: -200),
-      -101,
-    );
-    expect(
-      Utils().getBestInitialIntervalValue(120, 180, 60, baseline: 2000),
-      140,
-    );
+        Utils().getBestInitialIntervalValue(120, 180, 60, baseline: 2000), 140);
     expect(Utils().getBestInitialIntervalValue(-10, 10, 4, baseline: 3), -9);
   });
 

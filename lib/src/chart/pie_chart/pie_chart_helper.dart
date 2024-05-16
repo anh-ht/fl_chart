@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 extension PieChartSectionDataListExtension on List<PieChartSectionData> {
   List<Widget> toWidgets() {
-    final widgets = List<Widget>.filled(length, Container());
+    List<Widget> widgets = List.filled(length, Container());
     var allWidgetsAreNull = true;
     asMap().entries.forEach((e) {
       final index = e.key;

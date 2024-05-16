@@ -1,50 +1,48 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:fl_chart/src/chart/pie_chart/pie_chart_painter.dart';
 import 'package:fl_chart/src/chart/pie_chart/pie_chart_renderer.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-
 import '../data_pool.dart';
 import 'pie_chart_renderer_test.mocks.dart';
 
 @GenerateMocks([Canvas, PaintingContext, BuildContext, PieChartPainter])
 void main() {
   group('PieChartRenderer', () {
-    final data = PieChartData();
+    final PieChartData data = PieChartData();
 
-    final targetData = PieChartData(centerSpaceRadius: 12);
+    final PieChartData targetData = PieChartData(centerSpaceRadius: 12);
 
-    const textScaler = TextScaler.linear(4);
+    const textScale = 4.0;
 
-    final mockBuildContext = MockBuildContext();
-    final renderBarChart = RenderPieChart(
+    MockBuildContext mockBuildContext = MockBuildContext();
+    RenderPieChart renderBarChart = RenderPieChart(
       mockBuildContext,
       data,
       targetData,
-      textScaler,
+      textScale,
     );
 
-    final mockPainter = MockPieChartPainter();
-    final mockPaintingContext = MockPaintingContext();
-    final mockCanvas = MockCanvas();
-    const mockSize = Size(44, 44);
+    MockPieChartPainter mockPainter = MockPieChartPainter();
+    MockPaintingContext mockPaintingContext = MockPaintingContext();
+    MockCanvas mockCanvas = MockCanvas();
+    Size mockSize = const Size(44, 44);
     when(mockPaintingContext.canvas).thenAnswer((realInvocation) => mockCanvas);
-    renderBarChart
-      ..mockTestSize = mockSize
-      ..painter = mockPainter;
+    renderBarChart.mockTestSize = mockSize;
+    renderBarChart.painter = mockPainter;
 
     test('test 1 correct data set', () {
       expect(renderBarChart.data == data, true);
       expect(renderBarChart.data == targetData, false);
       expect(renderBarChart.targetData == targetData, true);
-      expect(renderBarChart.textScaler == textScaler, true);
+      expect(renderBarChart.textScale == textScale, true);
       expect(renderBarChart.paintHolder.data == data, true);
       expect(renderBarChart.paintHolder.targetData == targetData, true);
-      expect(renderBarChart.paintHolder.textScaler == textScaler, true);
+      expect(renderBarChart.paintHolder.textScale == textScale, true);
     });
 
     test('test 2 check paint function', () {
@@ -61,19 +59,19 @@ void main() {
       final paintHolder = result.captured[1] as PaintHolder;
       expect(paintHolder.data, data);
       expect(paintHolder.targetData, targetData);
-      expect(paintHolder.textScaler, textScaler);
+      expect(paintHolder.textScale, textScale);
 
       verify(mockCanvas.restore()).called(1);
     });
 
     test('test 3 check getResponseAtLocation function', () {
-      final results = <Map<String, dynamic>>[];
+      List<Map<String, dynamic>> results = [];
       when(mockPainter.handleTouch(captureAny, captureAny, captureAny))
           .thenAnswer((inv) {
         results.add({
           'local_position': inv.positionalArguments[0] as Offset,
           'size': inv.positionalArguments[1] as Size,
-          'paint_holder': inv.positionalArguments[2] as PaintHolder,
+          'paint_holder': (inv.positionalArguments[2] as PaintHolder),
         });
         return MockData.pieTouchedSection1;
       });
@@ -85,18 +83,17 @@ void main() {
       final paintHolder = results[0]['paint_holder'] as PaintHolder;
       expect(paintHolder.data, data);
       expect(paintHolder.targetData, targetData);
-      expect(paintHolder.textScaler, textScaler);
+      expect(paintHolder.textScale, textScale);
     });
 
     test('test 4 check setters', () {
-      renderBarChart
-        ..data = targetData
-        ..targetData = data
-        ..textScaler = const TextScaler.linear(22);
+      renderBarChart.data = targetData;
+      renderBarChart.targetData = data;
+      renderBarChart.textScale = 22;
 
       expect(renderBarChart.data, targetData);
       expect(renderBarChart.targetData, data);
-      expect(renderBarChart.textScaler, const TextScaler.linear(22));
+      expect(renderBarChart.textScale, 22);
     });
   });
 }

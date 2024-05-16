@@ -32,7 +32,7 @@ void main() {
           ),
         );
 
-        for (var i = 1; i <= 9; i++) {
+        for (int i = 1; i <= 9; i++) {
           expect(find.text(i.toDouble().toString()), findsOneWidget);
         }
         expect(find.text('10.0'), findsNothing);
@@ -63,9 +63,7 @@ void main() {
                         .map(
                           (value) => AxisSideTitleWidgetHolder(
                             AxisSideTitleMetaData(
-                              value + 1,
-                              (value / 10) * viewWidth,
-                            ),
+                                value + 1, (value / 10) * viewWidth),
                             Text((value + 1).toString()),
                           ),
                         )
@@ -77,7 +75,7 @@ void main() {
           ),
         );
 
-        for (var i = 1; i <= 9; i++) {
+        for (int i = 1; i <= 9; i++) {
           expect(find.text(i.toDouble().toString()), findsOneWidget);
         }
         expect(find.text('10.0'), findsNothing);
@@ -89,7 +87,7 @@ void main() {
     testWidgets(
       'Test update from horizontal to vertical',
       (WidgetTester tester) async {
-        const valueKey = ValueKey('asdf');
+        const valueKey = ValueKey("asdf");
 
         const viewSize = 400.0;
         await tester.pumpWidget(
@@ -115,7 +113,7 @@ void main() {
           ),
         );
 
-        for (var i = 1; i <= 9; i++) {
+        for (int i = 1; i <= 9; i++) {
           expect(find.text(i.toDouble().toString()), findsOneWidget);
         }
         expect(find.text('10.0'), findsNothing);
@@ -144,7 +142,7 @@ void main() {
             ),
           ),
         );
-        for (var i = 1; i <= 9; i++) {
+        for (int i = 1; i <= 9; i++) {
           expect(find.text(i.toDouble().toString()), findsOneWidget);
         }
         expect(find.text('10.0'), findsNothing);
@@ -163,17 +161,16 @@ void main() {
     );
     final sideTitlesMetaData = oneToNineSideTitleMetaData(viewSize);
     final renderFlex = AxisSideTitlesRenderFlex(
+      direction: Axis.horizontal,
       axisSideMetaData: axisSideMetaData,
       axisSideTitlesMetaData: sideTitlesMetaData,
     );
 
-    final builder = DiagnosticPropertiesBuilder();
+    DiagnosticPropertiesBuilder builder = DiagnosticPropertiesBuilder();
     renderFlex.debugFillProperties(builder);
     expect(builder.properties.length > 1, true);
     expect(
-      (builder.properties.last as EnumProperty<Axis>).value,
-      Axis.horizontal,
-    );
+        (builder.properties.last as EnumProperty<Axis>).value, Axis.horizontal);
     expect(renderFlex.direction, Axis.horizontal);
     expect(renderFlex.axisSideMetaData, axisSideMetaData);
     expect(renderFlex.axisSideTitlesMetaData, sideTitlesMetaData);

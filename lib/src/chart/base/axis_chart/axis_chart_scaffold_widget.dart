@@ -1,32 +1,18 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/chart/base/axis_chart/side_titles/side_titles_widget.dart';
 import 'package:fl_chart/src/extensions/fl_titles_data_extension.dart';
 import 'package:flutter/material.dart';
 
-/// A scaffold to show an axis-based chart
-///
-/// It contains some placeholders to represent an axis-based chart.
-///
-/// It's something like the below graph:
-/// |----------------------|
-/// |      |  top  |       |
-/// |------|-------|-------|
-/// | left | chart | right |
-/// |------|-------|-------|
-/// |      | bottom|       |
-/// |----------------------|
-///
-/// `left`, `top`, `right`, `bottom` are some place holders to show titles
-/// provided by [AxisChartData.titlesData] around the chart
-/// `chart` is a centered place holder to show a raw chart.
+import 'side_titles/side_titles_widget.dart';
+
 class AxisChartScaffoldWidget extends StatelessWidget {
-  const AxisChartScaffoldWidget({
-    super.key,
-    required this.chart,
-    required this.data,
-  });
   final Widget chart;
   final AxisChartData data;
+
+  const AxisChartScaffoldWidget({
+    Key? key,
+    required this.chart,
+    required this.data,
+  }) : super(key: key);
 
   bool get showLeftTitles {
     if (!data.titlesData.show) {
@@ -65,14 +51,14 @@ class AxisChartScaffoldWidget extends StatelessWidget {
   }
 
   List<Widget> stackWidgets(BoxConstraints constraints) {
-    final widgets = <Widget>[
+    List<Widget> widgets = [
       Container(
         margin: data.titlesData.allSidesPadding,
         decoration: BoxDecoration(
           border: data.borderData.isVisible() ? data.borderData.border : null,
         ),
         child: chart,
-      ),
+      )
     ];
 
     int insertIndex(bool drawBelow) => drawBelow ? 0 : widgets.length;
@@ -125,10 +111,8 @@ class AxisChartScaffoldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Stack(children: stackWidgets(constraints));
-      },
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return Stack(children: stackWidgets(constraints));
+    });
   }
 }

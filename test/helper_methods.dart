@@ -4,10 +4,8 @@ import 'chart/data_pool.dart';
 
 void main() {
   test('test equalsPaths', () {
-    expect(
-      HelperMethods.equalsPaths(MockData.path1, MockData.path1Duplicate),
-      true,
-    );
+    expect(HelperMethods.equalsPaths(MockData.path1, MockData.path1Duplicate),
+        true);
     expect(HelperMethods.equalsPaths(MockData.path1, MockData.path2), false);
   });
 }
@@ -19,7 +17,7 @@ class HelperMethods {
     if (metrics1.length != metrics2.length) {
       return false;
     }
-    for (var i = 0; i < metrics1.length; i++) {
+    for (int i = 0; i < metrics1.length; i++) {
       if (metrics1[i].length != metrics2[i].length) {
         return false;
       }

@@ -1,33 +1,30 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart';
 import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:fl_chart/src/chart/base/base_chart/render_base_chart.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'bar_chart_painter.dart';
+
 // coverage:ignore-start
 
 /// Low level BarChart Widget.
 class BarChartLeaf extends LeafRenderObjectWidget {
-  const BarChartLeaf({super.key, required this.data, required this.targetData});
+  const BarChartLeaf({Key? key, required this.data, required this.targetData})
+      : super(key: key);
 
-  final BarChartData data;
-  final BarChartData targetData;
+  final BarChartData data, targetData;
 
   @override
   RenderBarChart createRenderObject(BuildContext context) => RenderBarChart(
-        context,
-        data,
-        targetData,
-        MediaQuery.of(context).textScaler,
-      );
+      context, data, targetData, MediaQuery.of(context).textScaleFactor);
 
   @override
   void updateRenderObject(BuildContext context, RenderBarChart renderObject) {
     renderObject
       ..data = data
       ..targetData = targetData
-      ..textScaler = MediaQuery.of(context).textScaler
+      ..textScale = MediaQuery.of(context).textScaleFactor
       ..buildContext = context;
   }
 }
@@ -39,10 +36,10 @@ class RenderBarChart extends RenderBaseChart<BarTouchResponse> {
     BuildContext context,
     BarChartData data,
     BarChartData targetData,
-    TextScaler textScaler,
+    double textScale,
   )   : _data = data,
         _targetData = targetData,
-        _textScaler = textScaler,
+        _textScale = textScale,
         super(targetData.barTouchData, context);
 
   BarChartData get data => _data;
@@ -64,12 +61,12 @@ class RenderBarChart extends RenderBaseChart<BarTouchResponse> {
     markNeedsPaint();
   }
 
-  TextScaler get textScaler => _textScaler;
-  TextScaler _textScaler;
+  double get textScale => _textScale;
+  double _textScale;
 
-  set textScaler(TextScaler value) {
-    if (_textScaler == value) return;
-    _textScaler = value;
+  set textScale(double value) {
+    if (_textScale == value) return;
+    _textScale = value;
     markNeedsPaint();
   }
 
@@ -78,16 +75,17 @@ class RenderBarChart extends RenderBaseChart<BarTouchResponse> {
   Size? mockTestSize;
 
   @visibleForTesting
-  BarChartPainter painter = BarChartPainter();
+  var painter = BarChartPainter();
 
-  PaintHolder<BarChartData> get paintHolder =>
-      PaintHolder(data, targetData, textScaler);
+  PaintHolder<BarChartData> get paintHolder {
+    return PaintHolder(data, targetData, textScale);
+  }
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    final canvas = context.canvas
-      ..save()
-      ..translate(offset.dx, offset.dy);
+    final canvas = context.canvas;
+    canvas.save();
+    canvas.translate(offset.dx, offset.dy);
     painter.paint(
       buildContext,
       CanvasWrapper(canvas, mockTestSize ?? size),
@@ -98,7 +96,7 @@ class RenderBarChart extends RenderBaseChart<BarTouchResponse> {
 
   @override
   BarTouchResponse getResponseAtLocation(Offset localPosition) {
-    final touchedSpot = painter.handleTouch(
+    var touchedSpot = painter.handleTouch(
       localPosition,
       mockTestSize ?? size,
       paintHolder,

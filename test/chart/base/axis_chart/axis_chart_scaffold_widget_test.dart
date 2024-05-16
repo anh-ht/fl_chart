@@ -14,7 +14,7 @@ void main() {
   );
 
   final lineChartDataWithNoTitles = lineChartDataBase.copyWith(
-    titlesData: const FlTitlesData(
+    titlesData: FlTitlesData(
       show: false,
       leftTitles: AxisTitles(),
       topTitles: AxisTitles(),
@@ -33,6 +33,7 @@ void main() {
       ),
     ),
     titlesData: FlTitlesData(
+      show: true,
       leftTitles: AxisTitles(
         axisNameWidget: const Icon(Icons.arrow_left),
         axisNameSize: 10,
@@ -40,7 +41,7 @@ void main() {
           showTitles: true,
           reservedSize: 10,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('L-${value.toInt()}');
+            return Text('L-${value.toInt().toString()}');
           },
           interval: 1,
         ),
@@ -52,7 +53,7 @@ void main() {
           showTitles: true,
           reservedSize: 20,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('T-${value.toInt()}');
+            return Text('T-${value.toInt().toString()}');
           },
           interval: 1,
         ),
@@ -64,7 +65,7 @@ void main() {
           showTitles: true,
           reservedSize: 30,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('R-${value.toInt()}');
+            return Text('R-${value.toInt().toString()}');
           },
           interval: 1,
         ),
@@ -76,7 +77,7 @@ void main() {
           showTitles: true,
           reservedSize: 40,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('B-${value.toInt()}');
+            return Text('B-${value.toInt().toString()}');
           },
           interval: 1,
         ),
@@ -92,9 +93,13 @@ void main() {
           color: Colors.red,
           width: 6,
         ),
+        top: BorderSide.none,
+        right: BorderSide.none,
+        bottom: BorderSide.none,
       ),
     ),
     titlesData: FlTitlesData(
+      show: true,
       leftTitles: AxisTitles(
         axisNameWidget: const Icon(Icons.arrow_left),
         axisNameSize: 10,
@@ -102,14 +107,14 @@ void main() {
           showTitles: true,
           reservedSize: 10,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('L-${value.toInt()}');
+            return Text('L-${value.toInt().toString()}');
           },
           interval: 1,
         ),
       ),
-      topTitles: const AxisTitles(),
-      rightTitles: const AxisTitles(),
-      bottomTitles: const AxisTitles(),
+      topTitles: AxisTitles(),
+      rightTitles: AxisTitles(),
+      bottomTitles: AxisTitles(),
     ),
   );
 
@@ -117,20 +122,21 @@ void main() {
       lineChartDataBase.copyWith(
     borderData: FlBorderData(show: false),
     titlesData: FlTitlesData(
+      show: true,
       leftTitles: AxisTitles(
         axisNameSize: 10,
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 10,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('L-${value.toInt()}');
+            return Text('L-${value.toInt().toString()}');
           },
           interval: 1,
         ),
       ),
-      topTitles: const AxisTitles(),
-      rightTitles: const AxisTitles(),
-      bottomTitles: const AxisTitles(),
+      topTitles: AxisTitles(),
+      rightTitles: AxisTitles(),
+      bottomTitles: AxisTitles(),
     ),
   );
 
@@ -138,20 +144,22 @@ void main() {
       lineChartDataBase.copyWith(
     borderData: FlBorderData(show: false),
     titlesData: FlTitlesData(
+      show: true,
       leftTitles: AxisTitles(
         axisNameSize: 10,
         axisNameWidget: const Icon(Icons.arrow_left),
         sideTitles: SideTitles(
+          showTitles: false,
           reservedSize: 10,
           getTitlesWidget: (double value, TitleMeta meta) {
-            return Text('L-${value.toInt()}');
+            return Text('L-${value.toInt().toString()}');
           },
           interval: 1,
         ),
       ),
-      topTitles: const AxisTitles(),
-      rightTitles: const AxisTitles(),
-      bottomTitles: const AxisTitles(),
+      topTitles: AxisTitles(),
+      rightTitles: AxisTitles(),
+      bottomTitles: AxisTitles(),
     ),
   );
 
@@ -167,14 +175,12 @@ void main() {
                 width: viewSize.width,
                 height: viewSize.height,
                 child: AxisChartScaffoldWidget(
-                  chart: LayoutBuilder(
-                    builder: (context, constraints) {
-                      chartDrawingSize = constraints.biggest;
-                      return const ColoredBox(
-                        color: Colors.red,
-                      );
-                    },
-                  ),
+                  chart: LayoutBuilder(builder: (context, constraints) {
+                    chartDrawingSize = constraints.biggest;
+                    return Container(
+                      color: Colors.red,
+                    );
+                  }),
                   data: lineChartDataWithNoTitles,
                 ),
               ),
@@ -200,14 +206,12 @@ void main() {
                 width: viewSize.width,
                 height: viewSize.height,
                 child: AxisChartScaffoldWidget(
-                  chart: LayoutBuilder(
-                    builder: (context, constraints) {
-                      chartDrawingSize = constraints.biggest;
-                      return const ColoredBox(
-                        color: Colors.red,
-                      );
-                    },
-                  ),
+                  chart: LayoutBuilder(builder: (context, constraints) {
+                    chartDrawingSize = constraints.biggest;
+                    return Container(
+                      color: Colors.red,
+                    );
+                  }),
                   data: lineChartDataWithAllTitles,
                 ),
               ),
@@ -217,29 +221,40 @@ void main() {
       );
 
       Future<void> checkSide(AxisSide side) async {
-        final axisChar = switch (side) {
-          AxisSide.left => 'L',
-          AxisSide.top => 'T',
-          AxisSide.right => 'R',
-          AxisSide.bottom => 'B',
-        };
-        for (var i = 0; i <= 10; i++) {
+        String axisChar;
+        switch (side) {
+          case AxisSide.left:
+            axisChar = 'L';
+            break;
+          case AxisSide.top:
+            axisChar = 'T';
+            break;
+          case AxisSide.right:
+            axisChar = 'R';
+            break;
+          case AxisSide.bottom:
+            axisChar = 'B';
+            break;
+          default:
+            throw StateError('Invalid');
+        }
+        for (int i = 0; i <= 10; i++) {
           expect(find.text('$axisChar-$i'), findsOneWidget);
         }
       }
 
       expect(chartDrawingSize, const Size(300, 260));
       expect(find.byIcon(Icons.arrow_left), findsOneWidget);
-      await checkSide(AxisSide.left);
+      checkSide(AxisSide.left);
 
       expect(find.byIcon(Icons.arrow_drop_up), findsOneWidget);
-      await checkSide(AxisSide.top);
+      checkSide(AxisSide.top);
 
       expect(find.byIcon(Icons.arrow_right), findsOneWidget);
-      await checkSide(AxisSide.right);
+      checkSide(AxisSide.right);
 
       expect(find.byIcon(Icons.arrow_drop_down), findsOneWidget);
-      await checkSide(AxisSide.bottom);
+      checkSide(AxisSide.bottom);
 
       expect(find.byType(Text), findsNWidgets(44));
       expect(find.byType(Icon), findsNWidgets(4));
@@ -258,14 +273,12 @@ void main() {
                 width: viewSize.width,
                 height: viewSize.height,
                 child: AxisChartScaffoldWidget(
-                  chart: LayoutBuilder(
-                    builder: (context, constraints) {
-                      chartDrawingSize = constraints.biggest;
-                      return const ColoredBox(
-                        color: Colors.red,
-                      );
-                    },
-                  ),
+                  chart: LayoutBuilder(builder: (context, constraints) {
+                    chartDrawingSize = constraints.biggest;
+                    return Container(
+                      color: Colors.red,
+                    );
+                  }),
                   data: lineChartDataWithOnlyLeftTitles,
                 ),
               ),
@@ -276,7 +289,7 @@ void main() {
 
       expect(chartDrawingSize, const Size(374, 400));
       expect(find.byIcon(Icons.arrow_left), findsOneWidget);
-      for (var i = 0; i <= 10; i++) {
+      for (int i = 0; i <= 10; i++) {
         expect(find.text('L-$i'), findsOneWidget);
       }
 
@@ -297,14 +310,12 @@ void main() {
                 width: viewSize.width,
                 height: viewSize.height,
                 child: AxisChartScaffoldWidget(
-                  chart: LayoutBuilder(
-                    builder: (context, constraints) {
-                      chartDrawingSize = constraints.biggest;
-                      return const ColoredBox(
-                        color: Colors.red,
-                      );
-                    },
-                  ),
+                  chart: LayoutBuilder(builder: (context, constraints) {
+                    chartDrawingSize = constraints.biggest;
+                    return Container(
+                      color: Colors.red,
+                    );
+                  }),
                   data: lineChartDataWithOnlyLeftTitlesWithoutAxisName,
                 ),
               ),
@@ -314,7 +325,7 @@ void main() {
       );
 
       expect(chartDrawingSize, const Size(390, 400));
-      for (var i = 0; i <= 10; i++) {
+      for (int i = 0; i <= 10; i++) {
         expect(find.text('L-$i'), findsOneWidget);
       }
 
@@ -335,14 +346,12 @@ void main() {
                 width: viewSize.width,
                 height: viewSize.height,
                 child: AxisChartScaffoldWidget(
-                  chart: LayoutBuilder(
-                    builder: (context, constraints) {
-                      chartDrawingSize = constraints.biggest;
-                      return const ColoredBox(
-                        color: Colors.red,
-                      );
-                    },
-                  ),
+                  chart: LayoutBuilder(builder: (context, constraints) {
+                    chartDrawingSize = constraints.biggest;
+                    return Container(
+                      color: Colors.red,
+                    );
+                  }),
                   data: lineChartDataWithOnlyLeftAxisNameWithoutSideTitles,
                 ),
               ),

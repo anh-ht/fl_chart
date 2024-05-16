@@ -5,12 +5,6 @@ All sources are sorted by date.
 Did you find any new article or source? please contribute to have them all here.
 
 #### Blog post:
-<!--- 2022-11-33 --->
-* [Design Stunning Charts with fl_charts in Flutter](https://www.atatus.com/blog/design-stunning-charts-with-fl-charts-in-flutter/)
-
-<!--- 2022-04-12 --->
-* [Build beautiful charts in Flutter with FL Chart](https://blog.logrocket.com/build-beautiful-charts-flutter-fl-chart)
-
 <!--- 2021-11-18 --->
 * [Flutter4Fun UI Challenge 7](https://flutter4fun.com/ui-challenge-7/)
 
@@ -18,12 +12,6 @@ Did you find any new article or source? please contribute to have them all here.
 * [Stock charts](https://dev.to/kamilpowalowski/stock-charts-with-flchart-library-1gd2)
 
 #### Video:
-
-<!--- 2022-09-01 --->
-* [how to create line chart in flutter | fl_chart](https://www.youtube.com/watch?v=Iv3F2HO5Jvc)
-
-<!--- 2022-01-19 --->
-* [line chart in flutter - flutter tutorial](https://www.youtube.com/watch?v=xHzDAewbSGY)
 
 <!--- 2021-12-04 --->
 * [Portfolio Dashboard Flutter UI Desktop & Web](https://www.youtube.com/watch?v=H9vXUine7Zo)
